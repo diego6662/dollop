@@ -1,7 +1,7 @@
 import luigi
 import os
 import pandas as pd
-from task.util import get_urls, get_text 
+from dollop.util import get_urls, get_text 
 
 
 class GetData(luigi.Task):

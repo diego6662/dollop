@@ -1,7 +1,7 @@
 import pandas as pd
 import requests
 import justext
-
+import re
 
 def get_urls(df):
     """
@@ -21,19 +21,21 @@ def get_text(urls,path):
     Args:
         urls: URLs list of colombian newspaper
 
-    Output:
-        Returns a string containing all relevant text of the newspaper
     """
-    for i in range(len(urls)):
-        name_file = f"{path}/text-{i}"
-        file_name = open(name_file,"w")
-        try:
-            response = requests.get(urls[i])
-        except :
+    count_file = 1
+    for url in urls:
+        pdf = re.search(".pdf$",str(url))
+        if pdf:
             continue
-        paragraphs = justext.justext(response.content, justext.get_stoplist('Spanish'))
+        name_file = f"{path}/text-{count_file}"
+        try:
+            response = requests.get(url, timeout=2.5)
+            paragraphs = justext.justext(response.content, justext.get_stoplist('Spanish'))
+        except Exception:
+            continue
+        file_name = open(name_file,"w")
         for paragraph in paragraphs:
             if not paragraph.is_boilerplate:
                 file_name.write(f"{paragraph.text}\n")
         file_name.close()
-    return files
+        count_file += 1
