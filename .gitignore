@@ -1,6 +1,6 @@
 __pycache__/
 __pycache__
-files/
-file
-data/
-data
+logs/
+logs
+pipeline_data/
+pipeline_data
