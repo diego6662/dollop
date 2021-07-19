@@ -91,3 +91,4 @@ class ExtractEntities(luigi.Task):
         os.mkdir(self.sentences_folder)
         ner_sentences = ner_data(sentences)
         save_sentences(ner_sentences,self.sentences_folder) 
+
