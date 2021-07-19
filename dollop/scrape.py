@@ -48,7 +48,9 @@ def get_text(urls, path):
         data['text'] = text
 
         with open(name_file,"w") as f:
-            json.dump(data,f)
+            s = json.dumps(data, ensure_ascii=False)
+            s.encode('utf-8')
+            f.write(s)
 
         count_file += 1
     logger.close(count_file - 1)
