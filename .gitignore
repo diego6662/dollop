@@ -2,9 +2,13 @@ __pycache__/
 __pycache__
 logs/
 <<<<<<< HEAD
+<<<<<<< HEAD
 logs
 pipeline_data/
 pipeline_data
 =======
 pipeline_data/
 >>>>>>> changes step 1 and add step 3
+=======
+pipeline_data/
+>>>>>>> f85578ebf0404c1d36301ed7fa2bf69d60f55194
