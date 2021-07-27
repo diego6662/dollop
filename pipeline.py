@@ -2,7 +2,7 @@ import luigi
 import os
 import pandas as pd
 from dollop.scrape import get_urls, get_text 
-from dollop.split import split_sentences, save_sentences
+from dollop.ner import split_sentences, save_sentences,ner_data
 
 
 class WhoIsToCsv(luigi.Task):
@@ -57,19 +57,37 @@ class ScrapeUrl(luigi.Task):
 
 
 class SplitSentences(luigi.Task):
-    sentences_folder = 'pipeline_data/sentences_data/'
+    task_complete = False
+    sentences = []
 
     def requires(self):
         return ScrapeUrl()
     
     def output(self):
-        return luigi.LocalTarget(self.sentences_folder)
+        return self.sentences
+
+    def complete(self):
+        return self.task_complete
 
     def run(self):
         scraped_data_path = os.path.abspath(self.requires().txt_folder)
-        os.mkdir(self.sentences_folder)
         sentences_dict = split_sentences(scraped_data_path)
-        path = os.path.abspath(self.sentences_folder)
-        save_sentences(sentences_dict,path)
+        self.sentences = sentences_dict
+        self.task_complete = True
+        print("Split Complete!")
 
         
+class ExtractEntities(luigi.Task):
+    sentences_folder = 'pipeline_data/ner_data/'
+
+    def requires(self):
+        return SplitSentences()
+
+    def output(self):
+        return luigi.LocalTarget(self.sentences_folder)
+
+    def run(self):
+        sentences = self.requires().output()
+        os.mkdir(self.sentences_folder)
+        ner_sentences = ner_data(sentences)
+        save_sentences(ner_sentences,self.sentences_folder) 
