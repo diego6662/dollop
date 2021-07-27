@@ -1,6 +1,10 @@
 __pycache__/
 __pycache__
 logs/
+<<<<<<< HEAD
 logs
 pipeline_data/
 pipeline_data
+=======
+pipeline_data/
+>>>>>>> changes step 1 and add step 3

@@ -3,3 +3,4 @@ pandas==1.2.4
 jusText==2.2.0
 requests==2.22.0
 tqdm==4.61.2
+torch==1.9.0
