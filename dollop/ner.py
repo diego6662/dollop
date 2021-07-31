@@ -33,14 +33,14 @@ def split_sentences(path):
     return dict_list
 
 def save_sentences(sentence_dict,path):
-    file_number = 1
-    for sentence in sentence_dict:
-        file_name = f"{path}sentence_{file_number}.json"
-        with open(file_name,'w') as f:
+    file_name = path + 'ner_sentences.jsonl'
+    print('Start writing sentences into JSONL file!')
+    with open(file_name,'w',encoding='utf-8') as f:
+        for sentence in tqdm(sentence_dict):
             s = json.dumps(sentence, ensure_ascii=False)
             s.encode('utf-8')
-            f.write(s)
-        file_number += 1
+            f.write(s + '\n')
+    print('Finish writing')
 
 def clean_transformer_output(dict_list):
     clean_list = []
@@ -64,6 +64,7 @@ def ner_data(sentences):
         
         sentence['ner'] = phrase_dict
         ner_sentences.append(sentence)
+    print("Finish NER tagging")
     return ner_sentences
 
 
