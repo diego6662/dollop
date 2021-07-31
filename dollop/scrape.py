@@ -26,16 +26,17 @@ def get_text(urls, path):
         urls: URLs list of colombian newspaper
 
     """
+    print("Start scraping text")
     count_file = 1
     logger = Logger(urls)
-    for url in tqdm(urls[:50]):
+    for url in tqdm(urls):
         pdf = re.search(".pdf$",str(url))
         if pdf:
             logger.pdf_error()
             continue
         name_file = f"{path}/text-{count_file}.json"
         try:
-            response = requests.get(url, timeout=2.5)
+            response = requests.get(url, timeout=2)
             paragraphs = justext.justext(response.content, justext.get_stoplist('Spanish'))
         except Exception:
             logger.generic_error()
@@ -48,7 +49,9 @@ def get_text(urls, path):
         data['text'] = text
 
         with open(name_file,"w") as f:
-            json.dump(data,f)
+            s = json.dumps(data, ensure_ascii=False)
+            s.encode('utf-8')
+            f.write(s)
 
         count_file += 1
     logger.close(count_file - 1)
