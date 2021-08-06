@@ -1,9 +1,12 @@
 import luigi
+from tqdm import tqdm
 import os
 import pandas as pd
 from dollop.scrape import get_urls, get_text 
 from dollop.ner import split_sentences, save_sentences,ner_data
-from dollop.expand import read_data, merge_entities, data_expansion, merge_samples
+from dollop.expand import read_data, merge_entities, data_expansion, merge_samples, create_relationships
+from dollop.spacy_converter import extract_relations, convert_to_spacy
+
 
 class WhoIsToCsv(luigi.Task):
 # First step get the data base and convert to csv
@@ -135,3 +138,88 @@ class ExpandData(luigi.Task):
         path = self.expand_folder + 'ExpandData.json'
         df.to_json(path, lines=True,  orient='records', force_ascii=False )
         print("Done")
+
+
+class RemoveNegativeSamples(luigi.Task):
+    task_complete = False
+    clean_data = None
+    def requires(self):
+        return ExpandData()
+
+    def output(self):
+        return self.clean_data
+
+    def complete(self):
+        return self.task_complete
+
+    def run(self):
+        folder_data = self.requires().expand_folder
+        data_json = folder_data  + 'ExpandData.json'
+        data_json = pd.read_json(data_json, lines=True)
+        data_json.drop(data_json[data_json['sample'] == False].index, inplace=True)
+        self.clean_data = data_json
+        self.task_complete = True
+
+
+class CreateRelationship(luigi.Task):
+    data_folder = 'pipeline_data/relationship/'
+    train_data = None
+
+    def requires(self):
+        return RemoveNegativeSamples()
+
+    def output(self):
+        return self.train_data
+
+    def complete(self):
+        path = self.data_folder + 'train_data.json'
+        if os.path.exists(path):
+            self.train_data = pd.read_json(path, lines=True)
+            return True
+        else:
+            return False
+
+    def run(self):
+        data = self.requires().output()
+        # entity-1, entity-2, relation, ner
+        entity_1 = data['entity-1']
+        entity_2 = data['entity-2']
+        relations = data['relation']
+        ner = data['ner']
+        data_to_train = []
+        print('start creation of train data')
+        for i in tqdm(range(entity_1.shape[0])):
+            tokens = ner.iloc[i]  # this dict contain phrase-1 to phrase-n
+            # and every phrase have the following keys type, text, start, end, token_start
+            # I need create the relationship that have this relationship
+            for j in tokens.keys():
+                rel = create_relationships(entity1 = entity_1.iloc[i], entity2= entity_2.iloc[i],
+                                     relation=relations.iloc[i],tokens=tokens[j])
+                if rel == None:
+                    continue
+                else:
+                    data_to_train.append(rel)
+        df_output = pd.DataFrame(data_to_train)
+        os.mkdir(self.data_folder)
+        path = self.data_folder + 'train_data.json'
+        df_output.to_json(path, lines=True,  orient='records', force_ascii=False )
+        self.train_data = df_output
+
+
+class ConvertToSpacy(luigi.Task):
+    train_folder = 'pipeline_data/train_data/'
+    spacy_data_loc = train_folder + 'train.spacy'
+
+    def requires(self):
+        return CreateRelationship()
+
+    def output(self):
+        return luigi.LocalTarget(self.spacy_data_loc)
+
+    def run(self):
+        print('Start conversion into spacy format')
+        df = self.requires().output()
+        relations = extract_relations()
+        os.mkdir(self.train_folder)
+        convert_to_spacy(relations, df, self.spacy_data_loc)
+        print('Finish conversion into spacy format')
