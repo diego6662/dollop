@@ -33,7 +33,7 @@ def split_sentences(path):
     return dict_list
 
 def save_sentences(sentence_dict,path):
-    file_name = path + 'ner_sentences.jsonl'
+    file_name = path + 'ner_sentences.json'
     print('Start writing sentences into JSONL file!')
     with open(file_name,'w',encoding='utf-8') as f:
         for sentence in tqdm(sentence_dict):

@@ -3,7 +3,7 @@ import os
 import pandas as pd
 from dollop.scrape import get_urls, get_text 
 from dollop.ner import split_sentences, save_sentences,ner_data
-
+from dollop.expand import read_data, merge_entities, data_expansion, merge_samples
 
 class WhoIsToCsv(luigi.Task):
 # First step get the data base and convert to csv
@@ -91,3 +91,47 @@ class ExtractEntities(luigi.Task):
         os.mkdir(self.sentences_folder)
         ner_sentences = ner_data(sentences)
         save_sentences(ner_sentences,self.sentences_folder) 
+
+
+class AddEntities(luigi.Task):
+    task_complete = False
+    expanded_json = None
+
+    def requires(self):
+        return ExtractEntities()
+    
+    def output(self):
+       return self.expanded_json
+    
+    def complete(self):
+        return self.task_complete
+
+    def run(self):
+        print("Merging whois entities")
+        data = read_data(self.requires().sentences_folder)
+        merge_data = merge_entities(data)
+        self.expanded_json = merge_data
+        self.task_complete = True
+        print("Done")
+
+
+class ExpandData(luigi.Task):
+    expand_folder = 'pipeline_data/expanded_data/'
+ 
+    def requires(self):
+        return AddEntities()
+
+    def output(self):
+        return luigi.LocalTarget(self.expand_folder)
+
+    def run(self):
+        print("Start to expanding dataframe")
+        df = self.requires().output()
+        df.drop(df[df['ner'] == {}].index, inplace=True)
+        sample_list = data_expansion(df)
+        df = merge_samples(df,sample_list)
+        os.mkdir(self.expand_folder)
+        df.to_csv('test.csv',index=False)
+        path = self.expand_folder + 'ExpandData.json'
+        df.to_json(path, lines=True,  orient='records', force_ascii=False )
+        print("Done")
