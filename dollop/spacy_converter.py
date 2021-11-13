@@ -89,7 +89,7 @@ def convert_to_spacy(map_labels, data, save_loc):
             count_all["total"] += pos + neg
 
 
-    docbin = DocBin(docs = docs["total"], store_user_data=True)
+    docbin = DocBin(docs = docs["total"],)
     docbin.to_disk(save_loc)
 
 
