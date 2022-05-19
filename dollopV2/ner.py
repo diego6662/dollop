@@ -1,5 +1,6 @@
-from concurrent.futures import ThreadPoolExecutor
-from typing import Dict
+from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor
+import time
+from typing import Dict, List
 import spacy
 import os
 import json
@@ -41,3 +42,37 @@ def split_sentences(path):
     dict_list = filter(lambda x: x['sentences'] != [], dict_list)
         
     return dict_list
+
+def _ner_helper(sentence: Dict) -> Dict:
+    phrase_dict = {}
+    for phrase_count, phrase in enumerate(sentence['sentences']):
+        phrase_dict[f'phrase-{phrase_count}'] = clean_transformer_output(nlp_ner(phrase.replace('\n',' ')))
+    sentence['ner'] = phrase_dict
+    return phrase_dict
+
+def ner_data(sentences):
+    print("Start NER tagging")
+    with ProcessPoolExecutor() as executor:
+        ner_sentences = executor.map(_ner_helper,sentences)
+    print("Finish NER tagging")
+    return ner_sentences
+
+def save_sentences(sentence_dict,path):
+    file_name = path + 'ner_sentences.json'
+    print('Start writing sentences into JSONL file!')
+    with open(file_name,'w',encoding='utf-8') as f:
+        for sentence in tqdm(sentence_dict):
+            s = json.dumps(sentence, ensure_ascii=False)
+            s.encode('utf-8')
+            f.write(s + '\n')
+    print('Finish writing')
+
+def clean_transformer_output(dict_list):
+    clean_list = []
+    values = ('entity_group','word')
+    for item in dict_list:
+        new_dict = {}
+        new_dict[values[0]] = item[values[0]]
+        new_dict[values[1]] = item[values[1]]
+        clean_list.append(new_dict)
+    return clean_list

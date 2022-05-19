@@ -1,7 +1,7 @@
 import luigi
 import os
 import pandas as pd
-from dollopV2.ner import split_sentences
+from dollopV2.ner import ner_data, save_sentences, split_sentences
 from dollopV2.scrape import get_text, get_urls
 
 
@@ -76,3 +76,19 @@ class SplitSentences(luigi.Task):
         self.sentences = sentences_dict
         self.task_complete = True
         print("Split Complete!")
+
+class ExtractEntities(luigi.Task):
+    sentences_folder = 'pipeline_data/ner_data/'
+
+    def requires(self):
+        return SplitSentences()
+
+    def output(self):
+        return luigi.LocalTarget(self.sentences_folder)
+
+    def run(self):
+        sentences = self.requires().output()
+        if not os.path.isdir(self.sentences_folder):
+            os.mkdir(self.sentences_folder)
+        ner_sentences = ner_data(sentences)
+        save_sentences(ner_sentences,self.sentences_folder)
