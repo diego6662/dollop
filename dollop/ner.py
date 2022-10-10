@@ -1,39 +1,88 @@
+from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor
+from re import I
+from typing import Dict, List
 import spacy
 import os
 import json
 from tqdm import tqdm
 from transformers import AutoTokenizer, AutoModelForTokenClassification ,pipeline
-  
+from spacy import tokenizer
+from spacy.lang.es import Spanish
+nlp_2 = Spanish()
+tkz = tokenizer.Tokenizer(nlp_2.vocab)
+# from flair.data import Sentence
+# from flair.models import SequenceTagger
 
-tokenizer = AutoTokenizer.from_pretrained("mrm8488/bert-spanish-cased-finetuned-ner")
+# load tagger
+# tagger = SequenceTagger.load("flair/ner-spanish-large")
+
+# make example sentence
+
+tokenizer = AutoTokenizer.from_pretrained("mrm8488/bert-spanish-cased-finetuned-ner",max_length=700, padding=True, truncation=True, add_special_tokens = True)
 
 model = AutoModelForTokenClassification.from_pretrained("mrm8488/bert-spanish-cased-finetuned-ner")
 
 nlp_ner = pipeline(
     "ner",
-    grouped_entities = True,
+    aggregation_strategy="max",
     model=model,
     tokenizer=tokenizer,
     )
 
+
 nlp = spacy.load("es_core_news_sm")
 
-def split_sentences(path):
-    dir_json_files = os.listdir(path)
-    dict_list = []
-    print('Start split sentences!')
-    for file_name in tqdm(dir_json_files):
+def _split_sentences(path: str):
+    def splitter(file_name: str) -> Dict:
         sentence_dict = {}
         with open(path + f"/{file_name}",) as f:
             data = json.loads(f.read())
         doc = nlp(data['text'])
         sentence_dict['sentences'] = list(map(str,list(doc.sents)))
         sentence_dict['url'] = data['url']
-        dict_list.append(sentence_dict)
-    return dict_list
+        return sentence_dict
+    return splitter
+
+def split_sentences(path):
+    dir_json_files = os.listdir(path)
+    splitter = _split_sentences(path)
+    print('Start split sentences!')
+    # maybe is a good idea change thread to process
+    with ThreadPoolExecutor(max_workers=8) as executor:
+        dict_list = executor.map(splitter, dir_json_files)
+    dict_list = filter(lambda x: x['sentences'] != [], dict_list)
+        
+    return [*dict_list]
+
+def _ner_helper(sentence: Dict) -> Dict:
+    phrase_dict = {}
+    for phrase_count, phrase in enumerate(sentence['sentences']):
+        try:
+            phrase_clean = phrase.replace('\n',' ')
+            phrase_list = clean_transformer_output(
+                nlp_ner(
+                    phrase_clean
+                ),
+                phrase_clean
+            )
+            if phrase_list:
+                phrase_dict[f'phrase-{phrase_count}'] = phrase_list
+            else:
+                continue
+        except:
+            continue
+    sentence['ner'] = phrase_dict
+    return sentence
+
+def ner_data(sentences):
+    print("Start NER tagging")
+    with ProcessPoolExecutor() as executor:
+        ner_sentences = executor.map(_ner_helper,sentences)
+    print("Finish NER tagging")
+    return ner_sentences
 
 def save_sentences(sentence_dict,path):
-    file_name = path + 'ner_sentences.json'
+    file_name = path + 'ner_sentences.jsonl'
     print('Start writing sentences into JSONL file!')
     with open(file_name,'w',encoding='utf-8') as f:
         for sentence in tqdm(sentence_dict):
@@ -42,30 +91,27 @@ def save_sentences(sentence_dict,path):
             f.write(s + '\n')
     print('Finish writing')
 
-def clean_transformer_output(dict_list):
+def clean_transformer_output(dict_list, phrase):
     clean_list = []
-    values = ('entity_group','word')
     for item in dict_list:
         new_dict = {}
-        new_dict[values[0]] = item[values[0]]
-        new_dict[values[1]] = item[values[1]]
+        new_dict['entityLabel'] = item['entity_group']
+        new_dict['text'] = item['word']
+        new_dict['start'] = item['start']
+        new_dict['end'] = item['end']
+        word_tokens = item['word'].split(' ')
+        word_tokens = [word.text for word in tkz(item['word'])]
+        tokens = [word.text for word in tkz(phrase)]
+        index = find_sub_list(word_tokens, tokens)
+        index = index if index else (None, None)
+        new_dict['token_start'] = index[0]
+        new_dict['token_end'] = index[1]
         clean_list.append(new_dict)
-    return clean_list
+    clean_list = filter(lambda x: x['token_start'] is not None, clean_list)
+    return [*clean_list]
 
-def ner_data(sentences):
-    ner_sentences = []
-    print("Start NER tagging")
-    for sentence in tqdm(sentences):
-        phrase_count = 1
-        phrase_dict = {}
-        for phrase in sentence['sentences']:
-            phrase_dict[f'phrase-{phrase_count}'] = clean_transformer_output(nlp_ner(phrase.replace('\n',' ')))
-            phrase_count += 1
-        
-        sentence['ner'] = phrase_dict
-        ner_sentences.append(sentence)
-    print("Finish NER tagging")
-    return ner_sentences
-
-
-        
+def find_sub_list(sl,l):
+    sll=len(sl)
+    for ind in (i for i,e in enumerate(l) if e==sl[0]):
+        if l[ind:ind+sll]==sl:
+            return ind,ind+sll-1

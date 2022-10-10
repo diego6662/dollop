@@ -2,21 +2,18 @@
 name = "dollop"
 version = "0.1.0"
 description = ""
-authors = ["Diego Sanchez <diegosanchezco3@gmail.com>, DavDavid Przybilla <dav.alejandro@gmail.com>"]
+authors = ["Diego Sanchez <diegosanchezco3@gmail.com>"]
 
 [tool.poetry.dependencies]
-python = "^3.9"
-apache-airflow = "^2.3.0"
-pandas = "^1.4.2"
+python = "^3.10"
 luigi = "^3.0.3"
-numpy = "^1.22.3"
-tqdm = "^4.64.0"
+pandas = "^1.4.2"
 jusText = "^3.0.0"
-spacy = "^3.3.0"
-transformers = "^4.19.1"
-tokenizers = "^0.12.1"
+requests = "^2.27.1"
+tqdm = "^4.64.0"
 torch = "^1.11.0"
-openpyxl = "^3.0.9"
+transformers = "^4.19.2"
+spacy = "^3.3.0"
 
 [tool.poetry.dev-dependencies]
 
