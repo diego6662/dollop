@@ -5,18 +5,27 @@ from tqdm import tqdm
 from transformers import AutoTokenizer, AutoModelForTokenClassification ,pipeline
   
 
-tokenizer = AutoTokenizer.from_pretrained("mrm8488/bert-spanish-cased-finetuned-ner")
+tokenizer = AutoTokenizer.from_pretrained("mrm8488/bert-spanish-cased-finetuned-ner",)
 
-model = AutoModelForTokenClassification.from_pretrained("mrm8488/bert-spanish-cased-finetuned-ner")
+model = AutoModelForTokenClassification.from_pretrained("mrm8488/bert-spanish-cased-finetuned-ner",)
+
 
 nlp_ner = pipeline(
     "ner",
-    grouped_entities = True,
-    model=model,
-    tokenizer=tokenizer,
-    )
+    model="mrm8488/bert-spanish-cased-finetuned-ner",
+    tokenizer=(
+        'mrm8488/bert-spanish-cased-finetuned-ner',  
+        {
+            "use_fast": True,
+        }
+    ),
 
-nlp = spacy.load("es_core_news_sm")
+    aggregation_strategy = 'max'
+)
+
+
+
+nlp = spacy.load("es_core_news_lg")
 
 def split_sentences(path):
     dir_json_files = os.listdir(path)
@@ -42,15 +51,21 @@ def save_sentences(sentence_dict,path):
             f.write(s + '\n')
     print('Finish writing')
 
-def clean_transformer_output(dict_list):
-    clean_list = []
-    values = ('entity_group','word')
-    for item in dict_list:
+def clean_transformer_output(dict_list,document):
+    output = {
+            'document': document,
+            'tokens': []
+            }
+    for index, item in enumerate(dict_list):
         new_dict = {}
-        new_dict[values[0]] = item[values[0]]
-        new_dict[values[1]] = item[values[1]]
-        clean_list.append(new_dict)
-    return clean_list
+        new_dict['type'] = item['entity_group']
+        new_dict['text'] = item['word']
+        new_dict['start'] = str(item['start'])
+        new_dict['end'] = str(item['end'])
+        new_dict['token_start'] = str(index)
+        output['tokens'].append(new_dict)
+
+    return output
 
 def ner_data(sentences):
     ner_sentences = []
@@ -58,9 +73,14 @@ def ner_data(sentences):
     for sentence in tqdm(sentences):
         phrase_count = 1
         phrase_dict = {}
-        for phrase in sentence['sentences']:
-            phrase_dict[f'phrase-{phrase_count}'] = clean_transformer_output(nlp_ner(phrase.replace('\n',' ')))
-            phrase_count += 1
+        for i in range(len(sentence['sentences'])):
+            try:
+                # phrase_dict[f'phrase-{phrase_count}'] = nlp_ner(phrase.replace('\n',' '))
+                phrase_dict[f'phrase-{phrase_count}'] = clean_transformer_output(nlp_ner(sentence['sentences'][i].replace('\n',' ')),
+                        sentence['sentences'][i],)
+                phrase_count += 1
+            except :
+                continue
         
         sentence['ner'] = phrase_dict
         ner_sentences.append(sentence)
@@ -68,4 +88,4 @@ def ner_data(sentences):
     return ner_sentences
 
 
-        
+

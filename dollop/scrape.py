@@ -3,7 +3,7 @@ import requests
 import justext
 import re
 from tqdm import tqdm
-from .logging import Logger 
+from .logging_ import Logger 
 import json
 
 
