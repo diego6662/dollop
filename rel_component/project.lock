@@ -1,0 +1,51 @@
+train_transformer:
+  cmd: python -m spacy run train_transformer
+  script:
+    - python -m spacy train configs/rel_trf.cfg --output training --paths.train data/relations_training.spacy
+      --paths.dev data/relations_dev.spacy -c ./scripts/custom_functions.py
+  deps:
+    - path: data/relations_training.spacy
+      md5: 0e9b675c977378b77d089127fbb4c7ef
+    - path: data/relations_dev.spacy
+      md5: 23ad69f6edd60598e33e2a5ba9189b82
+  outs:
+    - path: training/model-best
+      md5: 2713a8e73a4e9bbc21969db08c15ae5d
+  spacy_version: 3.4.2
+  spacy_git_version: 3d0e89536
+train_tok2vec:
+  cmd: python -m spacy run train_tok2vec
+  script:
+    - python -m spacy train configs/rel_tok2vec.cfg --output training --paths.train
+      data/relations_training.spacy --paths.dev data/relations_dev.spacy -c ./scripts/custom_functions.py
+  deps:
+    - path: data/relations_training.spacy
+      md5: 0e9b675c977378b77d089127fbb4c7ef
+    - path: data/relations_dev.spacy
+      md5: 23ad69f6edd60598e33e2a5ba9189b82
+  outs:
+    - path: training/model-best
+      md5: 3c57ebe300384c470be7322434e60d7c
+  spacy_version: 3.4.2
+  spacy_git_version: 3d0e89536
+evaluate:
+  cmd: python -m spacy run evaluate
+  script:
+    - python ./scripts/evaluate.py training/model-best data/relations_test.spacy False
+  deps:
+    - path: training/model-best
+      md5: 2713a8e73a4e9bbc21969db08c15ae5d
+    - path: data/relations_test.spacy
+      md5: dae8793c31b6a20e64be51b46b50842f
+  outs: []
+  spacy_version: 3.4.2
+  spacy_git_version: 3d0e89536
+clean:
+  cmd: python -m spacy run clean
+  script:
+    - rm -rf data/*
+    - rm -rf training/*
+  deps: []
+  outs: []
+  spacy_version: 3.4.2
+  spacy_git_version: 3d0e89536

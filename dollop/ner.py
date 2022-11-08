@@ -1,4 +1,5 @@
 from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor
+from hashlib import new
 from re import I
 from typing import Dict, List
 import spacy
@@ -48,16 +49,17 @@ def split_sentences(path):
     splitter = _split_sentences(path)
     print('Start split sentences!')
     # maybe is a good idea change thread to process
-    with ThreadPoolExecutor(max_workers=8) as executor:
+    with ThreadPoolExecutor() as executor:
         dict_list = executor.map(splitter, dir_json_files)
     dict_list = filter(lambda x: x['sentences'] != [], dict_list)
         
     return [*dict_list]
 
 def _ner_helper(sentence: Dict) -> Dict:
-    phrase_dict = {}
+    ner_list = []
     for phrase_count, phrase in enumerate(sentence['sentences']):
         try:
+            result = {'document': phrase}
             phrase_clean = phrase.replace('\n',' ')
             phrase_list = clean_transformer_output(
                 nlp_ner(
@@ -66,12 +68,13 @@ def _ner_helper(sentence: Dict) -> Dict:
                 phrase_clean
             )
             if phrase_list:
-                phrase_dict[f'phrase-{phrase_count}'] = phrase_list
+                result['tokens'] = phrase_list
+                ner_list.append(result)
             else:
                 continue
         except:
             continue
-    sentence['ner'] = phrase_dict
+    sentence['ner'] = ner_list
     return sentence
 
 def ner_data(sentences):

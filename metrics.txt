@@ -1,0 +1,193 @@
+    name: tok2vec,
+
+Random baseline:
+threshold 0.00 	 {'rel_micro_p': '0.13', 'rel_micro_r': '100.00', 'rel_micro_f': '0.27'}
+threshold 0.05 	 {'rel_micro_p': '0.14', 'rel_micro_r': '100.00', 'rel_micro_f': '0.28'}
+threshold 0.10 	 {'rel_micro_p': '0.15', 'rel_micro_r': '100.00', 'rel_micro_f': '0.30'}
+threshold 0.20 	 {'rel_micro_p': '0.15', 'rel_micro_r': '92.00', 'rel_micro_f': '0.31'}
+threshold 0.30 	 {'rel_micro_p': '0.17', 'rel_micro_r': '88.00', 'rel_micro_f': '0.33'}
+threshold 0.40 	 {'rel_micro_p': '0.16', 'rel_micro_r': '72.00', 'rel_micro_f': '0.32'}
+threshold 0.50 	 {'rel_micro_p': '0.18', 'rel_micro_r': '68.00', 'rel_micro_f': '0.36'}
+threshold 0.60 	 {'rel_micro_p': '0.17', 'rel_micro_r': '52.00', 'rel_micro_f': '0.34'}
+threshold 0.70 	 {'rel_micro_p': '0.14', 'rel_micro_r': '32.00', 'rel_micro_f': '0.28'}
+threshold 0.80 	 {'rel_micro_p': '0.19', 'rel_micro_r': '28.00', 'rel_micro_f': '0.37'}
+threshold 0.90 	 {'rel_micro_p': '0.22', 'rel_micro_r': '16.00', 'rel_micro_f': '0.43'}
+threshold 0.99 	 {'rel_micro_p': '0.00', 'rel_micro_r': '0.00', 'rel_micro_f': '0.00'}
+threshold 1.00 	 {'rel_micro_p': '0.00', 'rel_micro_r': '0.00', 'rel_micro_f': '0.00'}
+
+Results of the trained model:
+threshold 0.00 	 {'rel_micro_p': '0.13', 'rel_micro_r': '100.00', 'rel_micro_f': '0.27'}
+threshold 0.05 	 {'rel_micro_p': '0.00', 'rel_micro_r': '0.00', 'rel_micro_f': '0.00'}
+threshold 0.10 	 {'rel_micro_p': '0.00', 'rel_micro_r': '0.00', 'rel_micro_f': '0.00'}
+threshold 0.20 	 {'rel_micro_p': '0.00', 'rel_micro_r': '0.00', 'rel_micro_f': '0.00'}
+threshold 0.30 	 {'rel_micro_p': '0.00', 'rel_micro_r': '0.00', 'rel_micro_f': '0.00'}
+threshold 0.40 	 {'rel_micro_p': '0.00', 'rel_micro_r': '0.00', 'rel_micro_f': '0.00'}
+threshold 0.50 	 {'rel_micro_p': '0.00', 'rel_micro_r': '0.00', 'rel_micro_f': '0.00'}
+threshold 0.60 	 {'rel_micro_p': '0.00', 'rel_micro_r': '0.00', 'rel_micro_f': '0.00'}
+threshold 0.70 	 {'rel_micro_p': '0.00', 'rel_micro_r': '0.00', 'rel_micro_f': '0.00'}
+threshold 0.80 	 {'rel_micro_p': '0.00', 'rel_micro_r': '0.00', 'rel_micro_f': '0.00'}
+threshold 0.90 	 {'rel_micro_p': '0.00', 'rel_micro_r': '0.00', 'rel_micro_f': '0.00'}
+threshold 0.99 	 {'rel_micro_p': '0.00', 'rel_micro_r': '0.00', 'rel_micro_f': '0.00'}
+threshold 1.00 	 {'rel_micro_p': '0.00', 'rel_micro_r': '0.00', 'rel_micro_f': '0.00'}
+
+    name: transformers,
+    
+Random baseline:
+threshold 0.00 	 {'rel_micro_p': '0.13', 'rel_micro_r': '100.00', 'rel_micro_f': '0.27'}
+threshold 0.05 	 {'rel_micro_p': '0.13', 'rel_micro_r': '92.00', 'rel_micro_f': '0.26'}
+threshold 0.10 	 {'rel_micro_p': '0.13', 'rel_micro_r': '88.00', 'rel_micro_f': '0.26'}
+threshold 0.20 	 {'rel_micro_p': '0.14', 'rel_micro_r': '84.00', 'rel_micro_f': '0.28'}
+threshold 0.30 	 {'rel_micro_p': '0.15', 'rel_micro_r': '76.00', 'rel_micro_f': '0.29'}
+threshold 0.40 	 {'rel_micro_p': '0.13', 'rel_micro_r': '60.00', 'rel_micro_f': '0.27'}
+threshold 0.50 	 {'rel_micro_p': '0.12', 'rel_micro_r': '44.00', 'rel_micro_f': '0.23'}
+threshold 0.60 	 {'rel_micro_p': '0.12', 'rel_micro_r': '36.00', 'rel_micro_f': '0.24'}
+threshold 0.70 	 {'rel_micro_p': '0.14', 'rel_micro_r': '32.00', 'rel_micro_f': '0.28'}
+threshold 0.80 	 {'rel_micro_p': '0.16', 'rel_micro_r': '24.00', 'rel_micro_f': '0.32'}
+threshold 0.90 	 {'rel_micro_p': '0.11', 'rel_micro_r': '8.00', 'rel_micro_f': '0.21'}
+threshold 0.99 	 {'rel_micro_p': '0.00', 'rel_micro_r': '0.00', 'rel_micro_f': '0.00'}
+threshold 1.00 	 {'rel_micro_p': '0.00', 'rel_micro_r': '0.00', 'rel_micro_f': '0.00'}
+
+Results of the trained model:
+threshold 0.00 	 {'rel_micro_p': '0.13', 'rel_micro_r': '100.00', 'rel_micro_f': '0.27'}
+threshold 0.05 	 {'rel_micro_p': '0.13', 'rel_micro_r': '100.00', 'rel_micro_f': '0.27'}
+threshold 0.10 	 {'rel_micro_p': '0.13', 'rel_micro_r': '100.00', 'rel_micro_f': '0.27'}
+threshold 0.20 	 {'rel_micro_p': '0.13', 'rel_micro_r': '92.00', 'rel_micro_f': '0.26'}
+threshold 0.30 	 {'rel_micro_p': '0.06', 'rel_micro_r': '40.00', 'rel_micro_f': '0.13'}
+threshold 0.40 	 {'rel_micro_p': '0.07', 'rel_micro_r': '36.00', 'rel_micro_f': '0.14'}
+threshold 0.50 	 {'rel_micro_p': '0.09', 'rel_micro_r': '36.00', 'rel_micro_f': '0.17'}
+threshold 0.60 	 {'rel_micro_p': '0.12', 'rel_micro_r': '28.00', 'rel_micro_f': '0.24'}
+threshold 0.70 	 {'rel_micro_p': '0.00', 'rel_micro_r': '0.00', 'rel_micro_f': '0.00'}
+threshold 0.80 	 {'rel_micro_p': '0.00', 'rel_micro_r': '0.00', 'rel_micro_f': '0.00'}
+threshold 0.90 	 {'rel_micro_p': '0.00', 'rel_micro_r': '0.00', 'rel_micro_f': '0.00'}
+threshold 0.99 	 {'rel_micro_p': '0.00', 'rel_micro_r': '0.00', 'rel_micro_f': '0.00'}
+threshold 1.00 	 {'rel_micro_p': '0.00', 'rel_micro_r': '0.00', 'rel_micro_f': '0.00'}
+
+relationship used 
+{
+    "LEADER": "LEADER",
+    "IS": "IS",
+    "IMPRISON": "IMPRISON",
+    "FRIENDSHIP": "FRIENDSHIP",
+    "BUSINESS_ALLIES": "BUSINESS_ALLIES",
+    "WORK_TOGETHER": "WORK_TOGETHER",
+    "SENTENCE": "SENTENCE",
+    "UNCLE_NEPHEW": "UNCLE_NEPHEW",
+    "SIBLINGS": "SIBLINGS",
+    "SANCTION": "SANCTION",
+    "CAPTURE": "CAPTURE",
+    "SYMPATHIZE": "SYMPATHIZE",
+    "MAKE_PAYMENT_TO": "MAKE_PAYMENT_TO",
+    "OWNER": "OWNER",
+    "WORKER": "WORKER",
+    "COUSINS": "COUSINS",
+    "POLITICAL_ENEMIES": "POLITICAL_ENEMIES",
+    "GOD_PARENT": "GOD_PARENT",
+    "DISMISS": "DISMISS",
+    "PARTNER": "PARTNER",
+    "MEMBER": "MEMBER",
+    "ABSOLVE": "ABSOLVE",
+    "FOUNDER": "FOUNDER",
+    "MALFEASANCE_ALLIES": "MALFEASANCE_ALLIES",
+    "CONTACT": "CONTACT",
+    "KIDNAP": "KIDNAP",
+    "DESIGNATE": "DESIGNATE",
+    "RIVALS": "RIVALS",
+    "CLOSE": "CLOSE",
+    "WORK_FOR": "WORK_FOR",
+    "BELONGS_TO": "BELONGS_TO",
+    "SIGLINGS": "SIGLINGS",
+    "STATEMENT_ACCUSE": "STATEMENT_ACCUSE",
+    "SUPPORT_TO": "SUPPORT_TO",
+    "PARENT_SON": "PARENT_SON",
+    "POLITICAL_ALLIES": "POLITICAL_ALLIES",
+    "OPPONENTS": "OPPONENTS",
+    "ACCUSE": "ACCUSE",
+    "BUSINESS_PARTNER": "BUSINESS_PARTNER",
+    "REVEAL_INFO_ABOUT": "REVEAL_INFO_ABOUT",
+    "GRANDPARENT_GRANDSON": "GRANDPARENT_GRANDSON",
+    "INVESTIGATE": "INVESTIGATE",
+    "STUDENT": "STUDENT",
+    "PARENT_SON_IN_LAW": "PARENT_SON_IN_LAW",
+    "GREATUNCLE_GREATNEPHEW": "GREATUNCLE_GREATNEPHEW",
+    "SPOUSE": "SPOUSE",
+    "FINE": "FINE"
+}
+with less relationships
+
+tok2vec
+Random baseline:
+threshold 0.00 	 {'rel_micro_p': '0.16', 'rel_micro_r': '100.00', 'rel_micro_f': '0.32'}
+threshold 0.05 	 {'rel_micro_p': '0.16', 'rel_micro_r': '92.00', 'rel_micro_f': '0.31'}
+threshold 0.10 	 {'rel_micro_p': '0.14', 'rel_micro_r': '80.00', 'rel_micro_f': '0.29'}
+threshold 0.20 	 {'rel_micro_p': '0.15', 'rel_micro_r': '76.00', 'rel_micro_f': '0.31'}
+threshold 0.30 	 {'rel_micro_p': '0.14', 'rel_micro_r': '60.00', 'rel_micro_f': '0.28'}
+threshold 0.40 	 {'rel_micro_p': '0.13', 'rel_micro_r': '48.00', 'rel_micro_f': '0.26'}
+threshold 0.50 	 {'rel_micro_p': '0.13', 'rel_micro_r': '40.00', 'rel_micro_f': '0.26'}
+threshold 0.60 	 {'rel_micro_p': '0.11', 'rel_micro_r': '28.00', 'rel_micro_f': '0.22'}
+threshold 0.70 	 {'rel_micro_p': '0.15', 'rel_micro_r': '28.00', 'rel_micro_f': '0.30'}
+threshold 0.80 	 {'rel_micro_p': '0.19', 'rel_micro_r': '24.00', 'rel_micro_f': '0.38'}
+threshold 0.90 	 {'rel_micro_p': '0.27', 'rel_micro_r': '16.00', 'rel_micro_f': '0.53'}
+threshold 0.99 	 {'rel_micro_p': '0.00', 'rel_micro_r': '0.00', 'rel_micro_f': '0.00'}
+threshold 1.00 	 {'rel_micro_p': '0.00', 'rel_micro_r': '0.00', 'rel_micro_f': '0.00'}
+
+Results of the trained model:
+threshold 0.00 	 {'rel_micro_p': '0.16', 'rel_micro_r': '100.00', 'rel_micro_f': '0.32'}
+threshold 0.05 	 {'rel_micro_p': '0.17', 'rel_micro_r': '100.00', 'rel_micro_f': '0.35'}
+threshold 0.10 	 {'rel_micro_p': '0.18', 'rel_micro_r': '96.00', 'rel_micro_f': '0.36'}
+threshold 0.20 	 {'rel_micro_p': '0.19', 'rel_micro_r': '88.00', 'rel_micro_f': '0.37'}
+threshold 0.30 	 {'rel_micro_p': '0.16', 'rel_micro_r': '68.00', 'rel_micro_f': '0.33'}
+threshold 0.40 	 {'rel_micro_p': '0.17', 'rel_micro_r': '60.00', 'rel_micro_f': '0.33'}
+threshold 0.50 	 {'rel_micro_p': '0.16', 'rel_micro_r': '48.00', 'rel_micro_f': '0.32'}
+threshold 0.60 	 {'rel_micro_p': '0.20', 'rel_micro_r': '48.00', 'rel_micro_f': '0.39'}
+threshold 0.70 	 {'rel_micro_p': '0.23', 'rel_micro_r': '44.00', 'rel_micro_f': '0.47'}
+threshold 0.80 	 {'rel_micro_p': '0.28', 'rel_micro_r': '36.00', 'rel_micro_f': '0.55'}
+threshold 0.90 	 {'rel_micro_p': '0.29', 'rel_micro_r': '20.00', 'rel_micro_f': '0.57'}
+threshold 0.99 	 {'rel_micro_p': '1.16', 'rel_micro_r': '8.00', 'rel_micro_f': '2.03'}
+threshold 1.00 	 {'rel_micro_p': '0.00', 'rel_micro_r': '0.00', 'rel_micro_f': '0.00'}
+
+transformers
+Random baseline:
+threshold 0.00 	 {'rel_micro_p': '0.16', 'rel_micro_r': '100.00', 'rel_micro_f': '0.32'}
+threshold 0.05 	 {'rel_micro_p': '0.17', 'rel_micro_r': '100.00', 'rel_micro_f': '0.34'}
+threshold 0.10 	 {'rel_micro_p': '0.17', 'rel_micro_r': '96.00', 'rel_micro_f': '0.34'}
+threshold 0.20 	 {'rel_micro_p': '0.18', 'rel_micro_r': '88.00', 'rel_micro_f': '0.35'}
+threshold 0.30 	 {'rel_micro_p': '0.17', 'rel_micro_r': '76.00', 'rel_micro_f': '0.35'}
+threshold 0.40 	 {'rel_micro_p': '0.17', 'rel_micro_r': '64.00', 'rel_micro_f': '0.34'}
+threshold 0.50 	 {'rel_micro_p': '0.18', 'rel_micro_r': '56.00', 'rel_micro_f': '0.36'}
+threshold 0.60 	 {'rel_micro_p': '0.19', 'rel_micro_r': '48.00', 'rel_micro_f': '0.38'}
+threshold 0.70 	 {'rel_micro_p': '0.19', 'rel_micro_r': '36.00', 'rel_micro_f': '0.38'}
+threshold 0.80 	 {'rel_micro_p': '0.26', 'rel_micro_r': '32.00', 'rel_micro_f': '0.51'}
+threshold 0.90 	 {'rel_micro_p': '0.32', 'rel_micro_r': '20.00', 'rel_micro_f': '0.63'}
+threshold 0.99 	 {'rel_micro_p': '0.68', 'rel_micro_r': '4.00', 'rel_micro_f': '1.16'}
+threshold 1.00 	 {'rel_micro_p': '0.00', 'rel_micro_r': '0.00', 'rel_micro_f': '0.00'}
+
+Results of the trained model:
+threshold 0.00 	 {'rel_micro_p': '0.16', 'rel_micro_r': '100.00', 'rel_micro_f': '0.32'}
+threshold 0.05 	 {'rel_micro_p': '0.16', 'rel_micro_r': '100.00', 'rel_micro_f': '0.32'}
+threshold 0.10 	 {'rel_micro_p': '0.16', 'rel_micro_r': '100.00', 'rel_micro_f': '0.32'}
+threshold 0.20 	 {'rel_micro_p': '0.16', 'rel_micro_r': '92.00', 'rel_micro_f': '0.31'}
+threshold 0.30 	 {'rel_micro_p': '0.15', 'rel_micro_r': '80.00', 'rel_micro_f': '0.30'}
+threshold 0.40 	 {'rel_micro_p': '0.19', 'rel_micro_r': '80.00', 'rel_micro_f': '0.37'}
+threshold 0.50 	 {'rel_micro_p': '0.19', 'rel_micro_r': '68.00', 'rel_micro_f': '0.37'}
+threshold 0.60 	 {'rel_micro_p': '0.14', 'rel_micro_r': '28.00', 'rel_micro_f': '0.28'}
+threshold 0.70 	 {'rel_micro_p': '0.00', 'rel_micro_r': '0.00', 'rel_micro_f': '0.00'}
+threshold 0.80 	 {'rel_micro_p': '0.00', 'rel_micro_r': '0.00', 'rel_micro_f': '0.00'}
+threshold 0.90 	 {'rel_micro_p': '0.00', 'rel_micro_r': '0.00', 'rel_micro_f': '0.00'}
+threshold 0.99 	 {'rel_micro_p': '0.00', 'rel_micro_r': '0.00', 'rel_micro_f': '0.00'}
+threshold 1.00 	 {'rel_micro_p': '0.00', 'rel_micro_r': '0.00', 'rel_micro_f': '0.00'}
+
+relationships used
+{
+    "LEADER": "LEADER",
+    "WORKER": "WORKER",
+    "PARTNER": "PARTNER",
+    "MEMBER": "MEMBER",
+    "INVESTIGATE": "INVESTIGATE",
+    "SENTENCE": "SENTENCE",
+    "CAPTURE": "CAPTURE",
+    "DESIGNATE": "DESIGNATE",
+    "BELONGS_TO": "BELONGS_TO",
+    "POLITICAL_ALLIES": "POLITICAL_ALLIES",
+    "OPPONENTS": "OPPONENTS",
+    "STUDENT": "STUDENT"
+}

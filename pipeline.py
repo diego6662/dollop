@@ -1,10 +1,12 @@
+import json
 import luigi
 import os
 import pandas as pd
+from tqdm import tqdm
 from dollop.ner import ner_data, save_sentences, split_sentences
 from dollop.scrape import get_text, get_urls
-from dollop.expand import read_data, merge_entities, data_expansion, merge_samples
-
+from dollop.expand import add_relationship, read_data, merge_entities, data_expansion, merge_samples
+from pathlib import Path
 
 class WhoIsToCsv(luigi.Task):
 # First step get the data base and convert to csv
@@ -92,7 +94,7 @@ class ExtractEntities(luigi.Task):
         if not os.path.isdir(self.sentences_folder):
             os.mkdir(self.sentences_folder)
         ner_sentences = ner_data(sentences)
-        ner_sentences = filter(lambda x: x['ner'] != {}, ner_sentences)
+        ner_sentences = filter(lambda x: x['ner'] != [], ner_sentences)
         ner_sentences = [*ner_sentences]
         save_sentences(ner_sentences,self.sentences_folder)
 
@@ -121,21 +123,51 @@ class AddEntities(luigi.Task):
 
 class ExpandData(luigi.Task):
     expand_folder = 'pipeline_data/expanded_data/'
+    expand_file = 'pipeline_data/expanded_data/ExpandData.json'
  
     def requires(self):
         return AddEntities()
 
     def output(self):
-        return luigi.LocalTarget(self.expand_folder)
+        return luigi.LocalTarget(self.expand_file)
 
     def run(self):
         print("Start to expanding dataframe")
         df = self.requires().output()
-        df.drop(df[df['ner'] == {}].index, inplace=True)
         sample_list = data_expansion(df)
         df = merge_samples(df,sample_list)
+        df.drop(df[df['sample'] == False].index, inplace=True)
         os.mkdir(self.expand_folder)
-        df.to_csv('test.csv',index=False)
-        path = self.expand_folder + 'ExpandData.json'
-        df.to_json(path, lines=True,  orient='records', force_ascii=False )
+        df.to_json(self.expand_file, lines=True,  orient='records', force_ascii=False )
         print("Done")
+
+
+class AddRelationship(luigi.Task):
+    relationship_folder = 'pipeline_data/final_data/'
+    relationship_file = 'pipeline_data/final_data/data.txt'
+    relationship_dict = 'pipeline_data/final_data/rel_dict.txt'
+    
+    def requires(self):
+        return ExpandData()
+    
+    def output(self):
+        return [luigi.LocalTarget(self.relationship_file), luigi.LocalTarget(self.relationship_dict)]
+    
+    def run(self):
+        df = pd.read_json(self.requires().expand_file, lines=True)
+        result, rel = add_relationship(df)
+        Path(self.relationship_folder).mkdir(parents=True, exist_ok=True)
+        print('Start to adding relationships')
+        with open(self.relationship_file,'w',encoding='utf-8') as f:
+            f.write('[\n')
+            for doc in tqdm(result):
+                s = json.dumps(doc, ensure_ascii=False)
+                s.encode('utf-8')
+                f.write(s + ',\n')
+            f.write(']')
+        print('Done')
+        with open(self.relationship_dict,'w',encoding='utf-8') as f:
+            s = json.dumps(rel, ensure_ascii=False)
+            s.encode('utf-8')
+            f.write(s)
+         
